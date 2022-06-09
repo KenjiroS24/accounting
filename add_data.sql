@@ -89,8 +89,10 @@ GRANT SELECT ON TABLE src.consignment TO users;
 CREATE TABLE src.employees_list (
 	employee_id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	full_name varchar NOT NULL, -- полное имя сотрудника
+	birth_date date NULL,
 	department varchar NOT NULL DEFAULT 'Иное'::character varying, -- название отдела, в котором работает сотрудник
-	CONSTRAINT employees_list_pkey PRIMARY KEY (employee_id)
+	CONSTRAINT employees_list_pkey PRIMARY KEY (employee_id),
+	UNIQUE (full_name, birth_date, department)
 );
 COMMENT ON TABLE src.employees_list IS 'employees_list - список сотрудников';
 
@@ -107,7 +109,7 @@ GRANT INSERT, SELECT, UPDATE ON TABLE src.employees_list TO users;
 -- src.items_list
 CREATE TABLE src.items_list (
 	items_id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
-	title varchar NULL, -- название техники
+	title varchar NOT NULL UNIQUE, -- название техники
 	CONSTRAINT items_list_pkey PRIMARY KEY (items_id)
 );
 COMMENT ON TABLE src.items_list IS 'items_list - список возможной техники для вставки в property_list';
